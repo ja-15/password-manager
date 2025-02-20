@@ -1,0 +1,17 @@
+[33mcommit 14388cb71ad6a2dce663cdfb4b9b02145938a0a0[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: John <johnmichaelarenga@gmail.com>
+Date:   Thu Feb 20 11:31:55 2025 +1100
+
+    ui updated
+
+[33mcommit dbfb9715cc17e65f1ad35385953bdcb5c557c1b4[m[33m ([m[1;32mmaster[m[33m)[m
+Author: John <johnmichaelarenga@gmail.com>
+Date:   Tue Feb 18 12:45:01 2025 +1100
+
+    First commit
+
+[33mcommit cae21febc4e48f28b544bf41b3a7e99bc8d9aa4b[m
+Author: John <johnmichaelarenga@gmail.com>
+Date:   Sat Feb 15 01:44:18 2025 +1100
+
+    Initial commit from Create Next App

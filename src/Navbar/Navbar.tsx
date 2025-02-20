@@ -1,20 +1,15 @@
-import { syncUser } from '@/actions/user.action';
-import { currentUser } from '@clerk/nextjs/server';
-import Link from 'next/link';
-import DesktopNavbar from './NavbarClient';
+"use client";
+import NavbarClient from './NavbarClient';
 
 
-const Navbar = async() => {
-  const user = await currentUser();
-  if (user) await syncUser();
+
+const Navbar = () => {
+
   return (
-    <>
-    <DesktopNavbar />
-    </>
-        
 
-
+    <NavbarClient />
   )
+
 }
 
 export default Navbar
