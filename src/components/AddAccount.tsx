@@ -4,6 +4,7 @@ import { addNewAccount } from "@/actions/account.action";
 import { useState } from "react";
 import { IoCloseCircleOutline } from "react-icons/io5";
 import GeneratePassword from "./GeneratePassword";
+import { newPassword } from "@/utils/newPassword";
 
 const AddAccount = ({isVisible, onClose}: {isVisible: boolean, onClose: () => void}) => {
   const [formData, setFormData] = useState({
@@ -36,75 +37,99 @@ const AddAccount = ({isVisible, onClose}: {isVisible: boolean, onClose: () => vo
     }))
   }
 
+  const generatePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const password = newPassword();
+    setFormData((prev) => ({
+      ...prev,
+      password
+    }))
+  }
+
 
   return (
 
-    <div className='fixed inset-0 bg-black/25 flex justify-center items-center'>
-      <div className='relative h-[60%] w-[28%] bg-white backdrop-blur-lg rounded-xl shadow-xl'>
-        <div className="absolute right-2 top-2 rounded-full cursor-pointer">
+    <div className='fixed inset-0 bg-black/40 flex justify-center items-center backdrop-blur-sm'>
+      <div className='relative h-[500px] w-[400px] bg-white backdrop-blur-sm rounded-xl shadow-xl flex flex-col shrink-0 p-4 items-center'>
+      <h3 className="mt-4 font-bold text-2xl">Enter your details below</h3>
+        <div className="absolute right-2 top-2 rounded-full">
           <button className="" onClick={() => onClose()}>
-            <IoCloseCircleOutline className="size-8 text-slate-300 hover:text-white transition-all duration-300 ease-in-out" />
+            <IoCloseCircleOutline className="size-8 hover:text-slate-600 text-sky-600 transition-all duration-300 ease-in-out cursor-pointer" />
           </button>
         </div>
-      <form 
-        onSubmit={handleSubmit}
-        className="flex flex-col items-center mx-auto">
-      <div className="mt-6 mb-3 flex flex-col">
-        <label htmlFor="websiteName" className=" text-gray-900 font-semibold">Website Name</label>
-        <input 
-          type="text" 
-          id="websiteName"
-          name="websiteName"
-          value={formData.websiteName}
-          onChange={handleChange} 
-          className="input-text" 
-          placeholder="google.com" required />
-      </div>
 
-      <div className="mb-3 flex flex-col">
-        <label htmlFor="username" className=" text-gray-900 font-semibold">Username</label>
-        <input 
-          type="text" 
-          id="username" 
-          name="username"
-          value={formData.username}
-          onChange={handleChange} 
-          className="input-text" 
-          placeholder="myusername..." />
-      </div>
+      <form className="flex flex-col items-center mx-auto">
 
-      <div className="mb-3 flex flex-col">
-        <label htmlFor="email" className=" text-gray-900 font-semibold">Email</label>
-        <input 
-          type="email" 
-          id="email" 
-          name="email"
-          value={formData.email}
-          onChange={handleChange} 
-          className="input-text" 
-          placeholder="john@email.com..." required />
-      </div>
+          <div className="flex flex-col items-center gap-4 mt-4">
+            <div className="flex flex-col">
+              <label htmlFor="websiteName" className=" text-gray-900 font-semibold">Website Name</label>
+              <input 
+                type="text" 
+                id="websiteName"
+                name="websiteName"
+                value={formData.websiteName}
+                onChange={handleChange} 
+                className="input-text" 
+                placeholder="google.com" required />
+            </div>
 
-      <div className="mb-3 flex flex-col">
-        <label htmlFor="password" className=" text-gray-900 font-semibold">Password</label>
-        <input 
-          type="password" 
-          id="password" 
-          name="password"
-          value={formData.password}
-          onChange={handleChange} 
-          className="input-text" 
-          placeholder="password..." required />
-      </div>
-      <GeneratePassword />
+            <div className="flex flex-col">
+              <label htmlFor="username" className=" text-gray-900 font-semibold">Username</label>
+              <input 
+                type="text" 
+                id="username" 
+                name="username"
+                value={formData.username}
+                onChange={handleChange} 
+                className="input-text" 
+                placeholder="myusername..." />
+            </div>
+          
+
+          
+            <div className="flex flex-col">
+              <label htmlFor="email" className=" text-gray-900 font-semibold">Email</label>
+              <input 
+                type="email" 
+                id="email" 
+                name="email"
+                value={formData.email}
+                onChange={handleChange} 
+                className="input-text" 
+                placeholder="john@email.com..." required />
+            </div>
+
+            <div className="mb-3 flex flex-col">
+              <div className="flex justify-between">
+                <label htmlFor="password" className=" text-gray-900 font-semibold">Password</label>
+                <button 
+                  onClick={generatePassword}
+                  className="text-sm pr-2 text-sky-600 hover:underline hover:text-sky-400 cursor-pointer transition-all duration-300">
+                  
+                  Generate</button>
+              </div>
+              <input 
+                type="password" 
+                id="password" 
+                name="password"
+                value={formData.password}
+                onChange={handleChange} 
+                className="input-text" 
+                placeholder="password..." required />
+            </div>
+          </div>
       <button type="submit" 
-        className="text-white bg-sky-600 hover:bg-sky-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+        onClick={handleSubmit}
+        className="mt-4 btn-primary">
         Add new account
         </button>
-        
     </form>
+
     
-        </div>
+    </div>
+    <div>
+    </div>
+   
     </div>
   )
 }

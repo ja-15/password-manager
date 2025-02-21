@@ -7,19 +7,19 @@ const numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 const symbols = ['!', '#', '$', '%', '&', '(', ')', '*', '+']
 
  
-export function newPassword(letterCount: number, numberCount: number, symbolCount: number) {
+export function newPassword() {
   const randomElement = (arr:string[]) => arr[Math.floor(Math.random() * arr.length + 1)]
   
   let passwordArray: string[] = [];
 
-  for (let i = 0; i <letterCount; i++) {
+  for (let i = 0; i < 10; i++) {
     passwordArray.push(randomElement(letters));
   }
-  for (let i = 0; i < numberCount; i++) {
+  for (let i = 0; i < 3; i++) {
     passwordArray.push(randomElement(numbers));
   }
 
-  for (let i = 0; i < symbolCount; i++) {
+  for (let i = 0; i < 3; i++) {
     passwordArray.push(randomElement(symbols));
   }
 

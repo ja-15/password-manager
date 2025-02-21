@@ -7,6 +7,8 @@ import { FaBarsStaggered } from "react-icons/fa6";
 import { useState } from 'react';
 import dynamic from 'next/dynamic';
 import { CgClose } from 'react-icons/cg';
+import { FaUser } from "react-icons/fa";
+import { IoIosLogIn } from "react-icons/io";
 
 export const menu = [
   {href:'#about', name:"About"},
@@ -37,18 +39,29 @@ const NavbarClient = () => {
     <h1 className='font-semibold text-lg py-0.5'>PASMAN</h1>
     </div>
       
+    <div className='flex gap-4 font-semibold max-md:hidden'>
+    {menu.map((item) => {
+      return (
+        <Link href={item.href} key={item.name}>
+          <p className=''>{item.name}</p>
+        </Link>
+      )
+     })}
+    </div>
+
     <div className='flex gap-4 items-center'>
-      
-          
           <SignedOut>
           <SignInButton forceRedirectUrl='/dashboard' mode='modal'>
-            <button className='btn-primary hidden-lg'>
+            <button className='btn-primary max-md:hidden flex gap-2 items-center'>
               Sign in
+              <IoIosLogIn className='size-5' />
             </button>
           </SignInButton>
             <SignUpButton mode='modal'>
-              <button className='btn-secondary hidden-lg'>
+              <button className='btn-secondary max-md:hidden flex gap-2 items-center'>
+              
                 Sign up
+                <FaUser className='size-4' />
               </button>
             </SignUpButton>
           </SignedOut>
@@ -57,7 +70,7 @@ const NavbarClient = () => {
             <UserButton />
           </SignedIn>
         
-          <div className='hidden-sm'>
+          <div className='md:hidden'>
             <FaBarsStaggered className='size-6 text-sky-600 cursor-pointer'
               onClick={handleClick} />
           </div>
@@ -66,18 +79,40 @@ const NavbarClient = () => {
 
         {/* mobile nav */}
 
-    {/* <div className={`${navOpen} text-white fixed inset-0 z-50 bg-black/70 w-full h-screen backdrop-blur-sm`}> */}
-    <div className={`${navOpen}text-white bg-slate-300 fixed justify-center flex flex-col h-full transform transition-all duration-500 w-[80%] sm:w-[60%]`} >
+    <div className={`${navOpen} text-white fixed inset-0 z-50 bg-black/70 w-full h-screen backdrop-blur-sm transform transition-all duration-500`}>
+
+    <div className={`${navOpen}text-white px-6 bg-black fixed flex flex-col h-full transform transition-all duration-500 w-[80%]`} >
+   
      {menu.map((item) => {
       return (
         <Link href={item.href} key={item.name}>
-          <p className=''>{item.name}</p>
+          <p className='pt-4 mt-3 font-semibold text-2xl'>{item.name}</p>
         </Link>
       )
      })}
+  <div className='flex flex-col mt-4'>
+    <SignedOut>
+          <SignInButton forceRedirectUrl='/dashboard' mode='modal'>
+            <button className='btn-primary w-fit mt-4 text-2xl font-semibold flex items-center gap-2'>
+              Sign in
+              <IoIosLogIn className='size-7' />
+            </button>
+          </SignInButton>
+            <SignUpButton mode='modal'>
+              <button className='btn-secondary w-fit mt-4 text-2xl font-semibold flex items-center gap-2'>
+                Sign up
+                <FaUser className='size-5' />
+              </button>
+            </SignUpButton>
+          </SignedOut>
+
+          </div>
+ 
+
+
      <CgClose onClick={closeNav} className="absolute top-[0.7rem] right-[1.4rem] sm:w-8 sm:h-8 w-6 h-6"/>
      </div>
-    {/* </div> */}
+    </div>
     </>
   )
 }

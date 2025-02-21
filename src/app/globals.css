@@ -1,46 +1,47 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
 
+@plugin 'tailwindcss-animate';
 
-html {
-  background-image: url('../assets/images/endless-constellation.svg');
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --breakpoint-xs: 475px;
+
+  --shadow-100: 2px 2px 0px 0px rgb(0, 0, 0);
+  --shadow-200: 2px 2px 0px 2px rgb(0, 0, 0);
+  --shadow-300: 2px 2px 0px 2px rgb(238, 43, 105);
 }
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-@media (min-width: 640px) {
-  .hidden-sm {
-    display: none;
 
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
   }
 }
 
-@media (max-width: 640px) {
-  .hidden-lg {
-    display: none;
-
-  }
+@utility max-container {
+  max-width: 1440px;
+  margin: 0 auto;
 }
 
-@layer components {
-  .max-container {
-    max-width: 1440px;
-    margin: 0 auto;
-  }
-
-  .gradient {
+@utility gradient {
   height: fit-content;
   z-index: 3;
   width: 100%;
   max-width: 640px;
-  background-image: radial-gradient(
-      at 27% 37%,
-      hsla(215, 98%, 61%, 1) 0px,
-      transparent 0%
-    ),
+  background-image:
+    radial-gradient(at 27% 37%, hsla(215, 98%, 61%, 1) 0px, transparent 0%),
     radial-gradient(at 97% 21%, hsla(125, 98%, 72%, 1) 0px, transparent 50%),
     radial-gradient(at 52% 99%, hsla(354, 98%, 61%, 1) 0px, transparent 50%),
     radial-gradient(at 10% 29%, hsla(256, 96%, 67%, 1) 0px, transparent 50%),
@@ -48,7 +49,7 @@ input[type="number"]::-webkit-inner-spin-button {
     radial-gradient(at 33% 50%, hsla(222, 67%, 73%, 1) 0px, transparent 50%),
     radial-gradient(at 79% 53%, hsla(343, 68%, 79%, 1) 0px, transparent 50%);
   position: absolute;
-  content: "";
+  content: '';
   width: 100%;
   height: 100%;
   filter: blur(100px) saturate(150%);
@@ -56,20 +57,45 @@ input[type="number"]::-webkit-inner-spin-button {
   opacity: 0.15;
 }
 
-.head_text {
-  @apply font-extrabold leading-[1.15] text-black text-5xl text-center items-center mt-48 bg-gradient-to-r from-sky-900 to-sky-600 bg-clip-text text-transparent;
+@utility head_text {
+  @apply font-extrabold leading-[1.15] text-[34px] md:text-5xl lg:text-6xl text-center items-center mt-24 md:mt-48 bg-linear-to-r from-sky-900 to-sky-600 bg-clip-text text-transparent;
 }
-.input-text {
-  @apply bg-gray-200/20 border border-gray-600/50 text-gray-900 text-sm rounded-lg w-[400px] p-2 
-   placeholder:text-gray-500 focus:outline-none focus:border-sky-600
+
+@utility input-text {
+  @apply bg-gray-200/20 border border-gray-600/50 text-gray-900 text-sm rounded-lg p-2 w-[300px]
+   placeholder:text-gray-500 focus:outline-hidden focus:border-sky-600;
 }
-.generatePassword-text {
-  @apply border rounded-md border-slate-400 focus:outline-none focus:border-sky-600 px-2 py-0.5 w-[100px]
+
+@utility generatePassword-text {
+  @apply border rounded-md border-slate-400 focus:outline-hidden focus:border-sky-600 px-2 py-0.5 w-[100px] text-center;
 }
-.btn-primary {
-  @apply bg-sky-600 text-white px-6 py-2 rounded-xl hover:bg-sky-500
+
+@utility btn-primary {
+  @apply text-white bg-sky-600 hover:bg-sky-500 focus:ring-4 focus:outline-hidden focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center cursor-pointer;
 }
-.btn-secondary {
-  @apply bg-white border border-sky-600 text-black px-6 py-2 rounded-xl hover:bg-sky-600 hover:text-white transition-all duration-300 ease-in-out
+
+@utility btn-secondary {
+  @apply bg-white border border-sky-600 text-black px-4 py-2 rounded-xl hover:bg-sky-600 hover:text-white transition-all duration-300 ease-in-out cursor-pointer;
 }
+
+@layer utilities {
+  html {
+    background-image: url('../assets/images/endless-constellation.svg');
+  }
+  input[type='number']::-webkit-outer-spin-button,
+  input[type='number']::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  @media (min-width: 640px) {
+    .hidden-sm {
+      display: none;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .hidden-lg {
+      display: none;
+    }
+  }
 }

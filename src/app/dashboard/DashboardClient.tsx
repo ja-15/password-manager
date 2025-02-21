@@ -20,7 +20,7 @@ const DashboardClient = ({accounts}: {accounts: Account[]}) => {
         
         <button 
           onClick={() => setIsVisible(true)}
-          className="border border-sky-600 p-2 rounded-lg hover:bg-sky-600 hover:text-white">Add Account</button>
+          className="btn-secondary">Add Account</button>
         </div>
         {/* table */}
          {/* Table */}
