@@ -3,6 +3,7 @@
 import prisma from "@/lib/prisma";
 import { getDbUserId } from "./user.action";
 import { revalidatePath } from "next/cache";
+import { encryptPassword, decryptPassword } from "@/utils/cryptoUtils";
 
 type Account = {
   websiteName: string;
@@ -21,6 +22,7 @@ export async function addNewAccount(
   password: string
 ): Promise<{success: boolean; account?: NewAccount; error?: string} | undefined> {
 
+  const hashedPassword = encryptPassword(password);
   try {
     const userId = await getDbUserId();
 
@@ -31,7 +33,7 @@ export async function addNewAccount(
         websiteName,
         email,
         username,
-        password,
+        password: hashedPassword,
         userId: userId
       }
     })
@@ -48,6 +50,7 @@ export async function addNewAccount(
 
 //Get accounts
 export async function getAccounts(): Promise<{ success: boolean; accounts?: Account[]; error?: string }> {
+
   try {
     const userId = await getDbUserId();
 
@@ -70,14 +73,19 @@ export async function getAccounts(): Promise<{ success: boolean; accounts?: Acco
       }
     })
 
-    // const formattedAccounts = accounts.map(account => ({
-    //   ...account,
-    //   createdAt: account.createdAt.toISOString()
-    // }));
+
+    const decryptedAccounts = accounts.map(account => {
+      try {
+        return { ...account, password: decryptPassword(account.password) };
+      } catch (error) {
+        console.error("Decryption failed for account ID:", account.id, error);
+        return { ...account, password: "Decryption error" }; 
+      }
+    });
     
-    return {success: true, accounts};
+    return {success: true, accounts: decryptedAccounts};
   } catch (error) {
     console.log("Error in getAccounts", error);
-    throw new Error("Failed to get Accounts");
+    return { success: false, error: "Failed to get Accounts" }; // Return instead of throwing to prevent app crash
   };
 }

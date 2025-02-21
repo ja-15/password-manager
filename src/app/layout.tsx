@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/Navbar/Navbar";
 import { ClerkProvider } from "@clerk/nextjs";
 
+
 const inter = Inter({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -26,7 +27,8 @@ export default function RootLayout({
       <body
         className={`${inter.className} antialiased`}
       >
-        <div className="main h-[100vh]">
+        <div className="relative main h-[100vh]">
+          
           <div className="gradient"></div>
           <main className='mx-4'>
             <Navbar />

@@ -11,7 +11,7 @@ export function newPassword() {
   const randomElement = (arr:string[]) => arr[Math.floor(Math.random() * arr.length + 1)]
   
   let passwordArray: string[] = [];
-
+  console.log(passwordArray)
   for (let i = 0; i < 10; i++) {
     passwordArray.push(randomElement(letters));
   }

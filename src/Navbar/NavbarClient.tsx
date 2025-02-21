@@ -9,6 +9,7 @@ import dynamic from 'next/dynamic';
 import { CgClose } from 'react-icons/cg';
 import { FaUser } from "react-icons/fa";
 import { IoIosLogIn } from "react-icons/io";
+import DarkModeToggle from "@/components/DarkModeToggle";
 
 export const menu = [
   {href:'#about', name:"About"},
@@ -21,7 +22,6 @@ export const menu = [
 const NavbarClient = () => {
   const [isShow, setIsShow] = useState(false);
   const navOpen = isShow ? "translate-x-0" : "translate-x-[-100%]"
-  console.log(isShow)
 
   const handleClick = () => {
     setIsShow(true)
@@ -39,7 +39,7 @@ const NavbarClient = () => {
     <h1 className='font-semibold text-lg py-0.5'>PASMAN</h1>
     </div>
       
-    <div className='flex gap-4 font-semibold max-md:hidden'>
+    <div className='flex gap-4 font-semibold max-lg:hidden'>
     {menu.map((item) => {
       return (
         <Link href={item.href} key={item.name}>
@@ -49,16 +49,16 @@ const NavbarClient = () => {
      })}
     </div>
 
-    <div className='flex gap-4 items-center'>
+    <div className='flex gap-2 items-center'>
           <SignedOut>
           <SignInButton forceRedirectUrl='/dashboard' mode='modal'>
-            <button className='btn-primary max-md:hidden flex gap-2 items-center'>
+            <button className='btn-primary max-lg:hidden flex gap-2 items-center'>
               Sign in
               <IoIosLogIn className='size-5' />
             </button>
           </SignInButton>
             <SignUpButton mode='modal'>
-              <button className='btn-secondary max-md:hidden flex gap-2 items-center'>
+              <button className='btn-secondary max-lg:hidden flex gap-2 items-center'>
               
                 Sign up
                 <FaUser className='size-4' />
@@ -66,14 +66,17 @@ const NavbarClient = () => {
             </SignUpButton>
           </SignedOut>
 
+          <div className='max-lg:hidden'>
           <SignedIn>
             <UserButton />
           </SignedIn>
-        
-          <div className='md:hidden'>
+          </div>
+
+          <div className='lg:hidden'>
             <FaBarsStaggered className='size-6 text-sky-600 cursor-pointer'
               onClick={handleClick} />
           </div>
+          <DarkModeToggle />
         </div>
         </nav>
 
