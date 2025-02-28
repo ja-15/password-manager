@@ -32,18 +32,19 @@ const NavbarClient = () => {
   }
 
   return (
-    <>
-    <nav className='max-container flex justify-between h-14 mt-4 items-center bg-white drop-shadow-3xl rounded-xl px-2 border'>
-    <div className='flex gap-1 align-middle text-black bg-white py-1 items-center'>
+    <div className='dark:slate-950 pt-4'>
+    <nav className='md:max-container flex justify-between h-14 mt-4  items-center dark:bg-slate-800 dark:border-slate-700 bg-white drop-shadow-3xl rounded-xl px-2 border'>
+    <Link href='/'>
+    <div className='flex gap-1 align-middle text-black py-1 items-center'>
     <SiGoogletagmanager className='size-6 text-sky-600'/>
-    <h1 className='font-semibold text-lg py-0.5'>PASMAN</h1>
+    <h1 className='font-semibold text-lg py-0.5 dark:text-slate-300'>PASMAN</h1>
     </div>
-      
+      </Link>
     <div className='flex gap-4 font-semibold max-lg:hidden'>
     {menu.map((item) => {
       return (
         <Link href={item.href} key={item.name}>
-          <p className=''>{item.name}</p>
+          <p className='dark:text-slate-300'>{item.name}</p>
         </Link>
       )
      })}
@@ -89,7 +90,7 @@ const NavbarClient = () => {
      {menu.map((item) => {
       return (
         <Link href={item.href} key={item.name}>
-          <p className='pt-4 mt-3 font-semibold text-2xl'>{item.name}</p>
+          <p className='pt-4 mt-3 font-semibold text-2xl dark:text-slate-300'>{item.name}</p>
         </Link>
       )
      })}
@@ -116,7 +117,8 @@ const NavbarClient = () => {
      <CgClose onClick={closeNav} className="absolute top-[0.7rem] right-[1.4rem] sm:w-8 sm:h-8 w-6 h-6"/>
      </div>
     </div>
-    </>
+    
+    </div>
   )
 }
 

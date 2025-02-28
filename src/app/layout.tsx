@@ -3,6 +3,7 @@ import { Inter} from "next/font/google";
 import "./globals.css";
 import Navbar from "@/Navbar/Navbar";
 import { ClerkProvider } from "@clerk/nextjs";
+import { ThemeProvider } from "@/theme/ThemeContext";
 
 
 const inter = Inter({
@@ -23,14 +24,15 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-    <html lang="en" suppressHydrationWarning>
+      <ThemeProvider>
+    <html lang="en" suppressHydrationWarning className="">
       <body
-        className={`${inter.className} antialiased`}
+        className={`${inter.className} antialiased dark:bg-slate-950 min-h-screen transition-colors duration-300`}
       >
-        <div className="relative main h-[100vh]">
+        <div className="relative ">
           
           <div className="gradient"></div>
-          <main className='mx-4'>
+          <main className='mx-4 '>
             <Navbar />
             {children}
           </main>
@@ -38,6 +40,7 @@ export default function RootLayout({
         </div>
       </body>
     </html>
+    </ThemeProvider>
     </ClerkProvider>
   );
 }
