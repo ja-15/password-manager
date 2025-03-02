@@ -9,6 +9,8 @@ const Dashboard = async() => {
   const user = await currentUser();
   if (!user) {
     redirect("/sign-in");
+
+  
   }
   const { success, accounts, error } = await getAccounts();
   if (!success) {
@@ -17,7 +19,7 @@ const Dashboard = async() => {
   }
 
   return (
-    <DashboardClient accounts={accounts} />
+    <DashboardClient accounts={accounts}  />
   )
 }
 

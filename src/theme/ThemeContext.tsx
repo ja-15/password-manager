@@ -22,17 +22,22 @@ export const useTheme = (): ThemeContextType => {
 
 export const ThemeProvider: React.FC<{children: React.ReactNode}> = ({children})  => {
     const [darkMode, setDarkMode] = useState(() => {
-        const savedTheme = localStorage.getItem("darkMode"); // Check localStorage on initial render
+      if (typeof window !== 'undefined') {
+        const savedTheme = window.localStorage.getItem("darkMode");
         return savedTheme ? JSON.parse(savedTheme) : false;
-});
-
+      }
+      return false; // Default value for server-side rendering
+    });
+  
     useEffect(() => {
-      localStorage.setItem("darkMode", JSON.stringify(darkMode)); // Update localStorage when theme changes
+      if (typeof window !== 'undefined'){
+        window.localStorage.setItem("darkMode", JSON.stringify(darkMode)); // Update localStorage when theme changes
       if (darkMode){
-      document.documentElement.classList.add("dark", darkMode); // Add or remove the "dark" class from the document root
+        document.documentElement.classList.add("dark", darkMode); // Add or remove the "dark" class from the document root
       } else {
         document.documentElement.classList.remove("dark")
       }
+    }
     }, [darkMode]);
 
     const toggleTheme = () => {setDarkMode((prev: boolean) => !prev)}; // Toggle the theme

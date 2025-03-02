@@ -1,12 +1,13 @@
 "use client";
 
-import { addNewAccount } from "@/actions/account.action";
-import { useState } from "react";
+import { addNewAccount, editAccount } from "@/actions/account.action";
+import { useState, useEffect } from "react";
 import { IoCloseCircleOutline } from "react-icons/io5";
 import { newPassword } from "@/utils/newPassword";
 import PasswordInput from "./PasswordInput";
+import { Account } from "@prisma/client";
 
-const AddAccount = ({isVisible, onClose}: {isVisible: boolean, onClose: () => void}) => {
+const AddAccount = ({type, isVisible, onClose, account}: {type: string, isVisible: boolean, onClose: () => void, account: Account | null}) => {
   const [formData, setFormData] = useState({
     websiteName: "",
     email: "",
@@ -15,10 +16,38 @@ const AddAccount = ({isVisible, onClose}: {isVisible: boolean, onClose: () => vo
   });
   const [error, setError] = useState("")
 
+  useEffect(() => {
+    if (account) {
+      setFormData({
+        websiteName: account.websiteName,
+        email: account.email,
+        username: account.username || '',
+        password: account.password,
+      });
+    }
+  }, [account]);
+
   if (!isVisible) return null;
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const {name, value} = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value
+    }))
+  }
 
-  const handleSubmit = async(e: React.FormEvent<HTMLElement>) => {
+  const generatePassword = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    const password = newPassword();
+    setFormData((prev) => ({
+      ...prev,
+      password
+    }))
+  }
+
+  //add
+  const addAccount = async(e: React.FormEvent<HTMLElement>) => {
     e.preventDefault();
     if (!formData.websiteName || !formData.password) {
       setError("Please fill all required fields");
@@ -46,39 +75,57 @@ const AddAccount = ({isVisible, onClose}: {isVisible: boolean, onClose: () => vo
     }
   }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const {name, value} = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value
-    }))
-  }
 
-  const generatePassword = (e: React.MouseEvent<HTMLButtonElement>) => {
+  //edit
+  const updateAccount = async(e: React.FormEvent<HTMLElement>) => {
     e.preventDefault();
-    const password = newPassword();
-    setFormData((prev) => ({
-      ...prev,
-      password
-    }))
-  }
+    if (!account) return;
 
+    try {
+      const formDataObj = new FormData();
+      formDataObj.append('websiteName', formData.websiteName);
+      formDataObj.append('email', formData.email);
+      formDataObj.append('username', formData.username);
+      formDataObj.append('password', formData.password);
+
+      const result = await editAccount(account.id, formDataObj);
+      if (result.success) {
+        console.log('Account updated successfully');
+        onClose();
+      } else {
+        setError(result.error || 'Failed to update account');
+      }
+    } catch (error) {
+      console.error('Failed to update account', error);
+      setError('Failed to update account');
+    }
+  };
+
+  //submit button
+  const handleSubmit = (e: React.FormEvent<HTMLElement>) => {
+    e.preventDefault();
+    if (type === "add") {
+      addAccount(e)
+    }else {
+      updateAccount(e)
+    }
+  }
 
   return (
 
     <div className='fixed inset-0 bg-black/40 flex justify-center items-center backdrop-blur-sm'>
-      <div className='relative w-[380px] bg-white backdrop-blur-sm rounded-xl shadow-xl flex flex-col shrink-0 items-center justify-center py-6'>
-      <h3 className="font-bold text-2xl">Register Account</h3>
+      <div className='relative w-[380px] bg-white backdrop-blur-sm rounded-xl shadow-xl flex flex-col shrink-0 items-center justify-center py-6 dark:bg-slate-950/20 dark:border dark:border-slate-500 dark:text-slate-300'>
+      <h3 className="font-bold text-2xl">{type === "add" ? "Register Account" : "Edit Account"}</h3>
         <div className="absolute right-2 top-2 rounded-full">
           <button className="" onClick={() => onClose()}>
-            <IoCloseCircleOutline className="size-6 text-slate-600 hover:text-sky-600 transition-all duration-300 ease-in-out cursor-pointer" />
+            <IoCloseCircleOutline className="size-6 text-slate-600 dark:text-slate-300 dark:hover:text-sky-600 hover:text-sky-600 transition-all duration-300 ease-in-out cursor-pointer" />
           </button>
         </div>
 
-      <form className="flex flex-col items-center mx-auto" onSubmit={handleSubmit}>
+      <form className="flex flex-col items-center mx-auto dark:text-slate-300" onSubmit={handleSubmit}>
           <div className="flex flex-col items-center gap-4 mt-4">
             <div className="flex flex-col">
-              <label htmlFor="websiteName" className=" text-gray-900 font-semibold text-sm">Website Name<span className="text-xs text-red-500">*</span></label>
+              <label htmlFor="websiteName" className=" text-gray-900 font-semibold text-sm dark:text-slate-300">Website Name<span className="text-xs text-red-500">*</span></label>
               <input 
                 type="text" 
                 id="websiteName"
@@ -90,7 +137,7 @@ const AddAccount = ({isVisible, onClose}: {isVisible: boolean, onClose: () => vo
             </div>
 
             <div className="flex flex-col">
-              <label htmlFor="email" className=" text-gray-900 font-semibold text-sm">Email<span className="text-xs text-red-500">*</span></label>
+              <label htmlFor="email" className=" text-gray-900 font-semibold text-sm dark:text-slate-300">Email<span className="text-xs text-red-500">*</span></label>
               <input 
                 type="email" 
                 id="email" 
@@ -102,7 +149,7 @@ const AddAccount = ({isVisible, onClose}: {isVisible: boolean, onClose: () => vo
             </div>
 
             <div className="flex flex-col">
-              <label htmlFor="username" className=" text-gray-900 font-semibold text-sm">Username</label>
+              <label htmlFor="username" className=" text-gray-900 font-semibold text-sm dark:text-slate-300">Username</label>
               <input 
                 type="text" 
                 id="username" 
@@ -116,7 +163,7 @@ const AddAccount = ({isVisible, onClose}: {isVisible: boolean, onClose: () => vo
 
             <div className="flex flex-col">
               <div className="flex justify-between">
-                <label htmlFor="password" className="text-gray-900 font-semibold text-sm">Password<span className="text-xs text-red-500">*</span></label>
+                <label htmlFor="password" className="text-gray-900 font-semibold text-sm dark:text-slate-300">Password<span className="text-xs text-red-500">*</span></label>
                 <button 
                   onClick={generatePassword}
                   className="text-sm pr-2 text-sky-600 hover:underline hover:text-sky-400 cursor-pointer transition-all duration-300">
@@ -133,7 +180,7 @@ const AddAccount = ({isVisible, onClose}: {isVisible: boolean, onClose: () => vo
       <button type="submit" 
 
         className="mt-8 mb-2 btn-primary w-full py-2">
-        Add new account
+         {type === "add" ? "Add new account" : "Edit Account" }
         </button>
     </form>
 

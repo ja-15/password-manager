@@ -6,7 +6,7 @@ import { IoIosArrowDroprightCircle } from "react-icons/io";
 export default async function Home() {
   const user = await currentUser()
   return (
-    <div className="w-full flex justify-center items-center flex-col">
+    <div className="w-full flex justify-center items-center flex-col z-50">
      <h1 className="head_text">Generate, store, and autofill complex <span className="hidden sm:inline"> <br /> </span>
      <span> passwords effortlessly.</span>
      </h1>

@@ -89,3 +89,71 @@ export async function getAccounts(): Promise<{ success: boolean; accounts?: Acco
     return { success: false, error: "Failed to get Accounts" }; // Return instead of throwing to prevent app crash
   };
 }
+
+//edit account
+export async function editAccount(accountId: string, formData: FormData) {
+  try {
+    const userId = await getDbUserId();
+    if (!userId) return { success: false, error: "User not authenticated" };;
+
+     const edit = await prisma.account.findUnique({
+      where: {id: accountId},
+      select: {userId: true}
+     });
+
+     if (!edit) throw new Error("Account not found");
+
+
+    const websiteName = formData.get("websiteName") as string;
+    const email = formData.get("email") as string;
+    const username = formData.get("username") as string;
+    const password = formData.get("password") as string;
+
+    const hashedPassword = encryptPassword(password);
+
+    const account = await prisma.account.update({
+      where: {
+        id: accountId,
+        userId: userId
+      },
+      data: {
+        websiteName,
+        email,
+        username,
+        password: hashedPassword
+      },
+    });
+    revalidatePath("/dashboard");
+    return {success: true, account};
+  
+  }catch (error) {
+    console.error("Error updating account", error);
+    return {success: false, error: "Failed to update account"}
+  }
+}
+
+//delete
+export async function deleteAccount(accountId: string) {
+  try {
+    const userId = await getDbUserId();
+    
+    const account = await prisma.account.findUnique({
+      where: {id: accountId},
+      select: {userId: true}
+    });
+
+    if (!account) throw new Error("Account not found");
+    if (account.userId !== userId) throw new Error("Unauthorized - no delete permission");
+
+    await prisma.account.delete({
+      where: {id: accountId},
+    });
+
+    revalidatePath("/dashboard")
+    return {success: true}
+
+  } catch (error) {
+    console.error("Failed to delete account:", error);
+    return { success: false, error: "Failed to delete account" };
+  }
+}
