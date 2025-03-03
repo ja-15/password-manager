@@ -78,10 +78,10 @@
 
 @utility btn-secondary {
   @apply bg-white border border-sky-600 text-black px-4 py-2 rounded-xl hover:bg-sky-900 hover:text-white transition-all 
-  duration-300 ease-in-out dark:bg-slate-950 dark:text-white dark:hover:bg-sky-900 cursor-pointer z-30;
+  duration-300 ease-in-out dark:bg-slate-950 dark:text-white dark:hover:bg-sky-900 cursor-pointer;
 }
 @utility table-border {
-  @apply border border-slate-400/30 px-4 py-2
+  @apply px-4 py-2 text-nowrap text-start
 }
 
 

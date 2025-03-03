@@ -86,7 +86,12 @@ const NavbarClient = () => {
     <div className={`${navOpen} text-white fixed inset-0 z-50 bg-black/70 w-full h-screen backdrop-blur-sm transform transition-all duration-500`}>
 
     <div className={`${navOpen}text-white px-6 bg-black fixed flex flex-col h-full transform transition-all duration-500 w-[80%]`} >
-   
+      
+      <div className='md:hidden pt-4'>
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
+          </div>
      {menu.map((item) => {
       return (
         <Link href={item.href} key={item.name}>
