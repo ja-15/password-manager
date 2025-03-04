@@ -5,14 +5,17 @@ import { useState, useEffect } from "react";
 import { IoCloseCircleOutline } from "react-icons/io5";
 import { newPassword } from "@/utils/newPassword";
 import PasswordInput from "./PasswordInput";
-import { Account } from "@prisma/client";
+import { Account } from "@/actions/account.action";
+import { toast } from "sonner";
 
-const AddAccount = ({type, isVisible, onClose, account}: {type: string, isVisible: boolean, onClose: () => void, account: Account | null}) => {
+const AddAccount = ({type, isVisible, onClose, account, onAddAccount, onUpdateAccount}: 
+  {type: string, isVisible: boolean, onClose: () => void, account: Account | null, onAddAccount: (newAccount: Account) => void, onUpdateAccount: (updatedAccount: Account) => void }) => {
   const [formData, setFormData] = useState({
     websiteName: "",
     email: "",
     username: "",
-    password: ""
+    password: "",
+    
   });
   const [error, setError] = useState("")
 
@@ -59,8 +62,10 @@ const AddAccount = ({type, isVisible, onClose, account}: {type: string, isVisibl
     }
     try {
       const result = await addNewAccount(formData.websiteName, formData.email, formData.username, formData.password)
-      if (result?.success) {
+      if (result?.success && result.account) {
         console.log("New account added");
+        toast.info("New account added");
+        onAddAccount(result.account);
         onClose();
       }
     } catch (error) {
@@ -75,6 +80,9 @@ const AddAccount = ({type, isVisible, onClose, account}: {type: string, isVisibl
     }
   }
 
+  const handleClear = () => {
+
+  }
 
   //edit
   const updateAccount = async(e: React.FormEvent<HTMLElement>) => {
@@ -89,8 +97,10 @@ const AddAccount = ({type, isVisible, onClose, account}: {type: string, isVisibl
       formDataObj.append('password', formData.password);
 
       const result = await editAccount(account.id, formDataObj);
-      if (result.success) {
+      if (result.success && result.account) {
         console.log('Account updated successfully');
+        toast.info("Account updated successfully!");
+        onUpdateAccount(result.account); // Call the onAddAccount function
         onClose();
       } else {
         setError(result.error || 'Failed to update account');
@@ -114,18 +124,18 @@ const AddAccount = ({type, isVisible, onClose, account}: {type: string, isVisibl
   return (
 
     <div className='fixed inset-0 bg-black/40 flex justify-center items-center backdrop-blur-sm'>
-      <div className='relative w-[380px] bg-white backdrop-blur-sm rounded-xl shadow-xl flex flex-col shrink-0 items-center justify-center py-6 dark:bg-slate-950/20 dark:border dark:border-slate-500 dark:text-slate-300'>
+      <div className='modal-div'>
       <h3 className="font-bold text-2xl">{type === "add" ? "Register Account" : "Edit Account"}</h3>
         <div className="absolute right-2 top-2 rounded-full">
           <button className="" onClick={() => onClose()}>
-            <IoCloseCircleOutline className="size-6 text-slate-600 dark:text-slate-300 dark:hover:text-sky-600 hover:text-sky-600 transition-all duration-300 ease-in-out cursor-pointer" />
+            <IoCloseCircleOutline className="modal-svg" />
           </button>
         </div>
 
       <form className="flex flex-col items-center mx-auto dark:text-slate-300" onSubmit={handleSubmit}>
           <div className="flex flex-col items-center gap-4 mt-4">
             <div className="flex flex-col">
-              <label htmlFor="websiteName" className=" text-gray-900 font-semibold text-sm dark:text-slate-300">Website Name<span className="text-xs text-red-500">*</span></label>
+              <label htmlFor="websiteName" className="modal-label">Website Name<span className="text-xs text-red-500">*</span></label>
               <input 
                 type="text" 
                 id="websiteName"
@@ -137,7 +147,7 @@ const AddAccount = ({type, isVisible, onClose, account}: {type: string, isVisibl
             </div>
 
             <div className="flex flex-col">
-              <label htmlFor="email" className=" text-gray-900 font-semibold text-sm dark:text-slate-300">Email<span className="text-xs text-red-500">*</span></label>
+              <label htmlFor="email" className="modal-label">Email<span className="text-xs text-red-500">*</span></label>
               <input 
                 type="email" 
                 id="email" 
@@ -149,7 +159,7 @@ const AddAccount = ({type, isVisible, onClose, account}: {type: string, isVisibl
             </div>
 
             <div className="flex flex-col">
-              <label htmlFor="username" className=" text-gray-900 font-semibold text-sm dark:text-slate-300">Username</label>
+              <label htmlFor="username" className=" modal-label">Username</label>
               <input 
                 type="text" 
                 id="username" 
@@ -163,10 +173,10 @@ const AddAccount = ({type, isVisible, onClose, account}: {type: string, isVisibl
 
             <div className="flex flex-col">
               <div className="flex justify-between">
-                <label htmlFor="password" className="text-gray-900 font-semibold text-sm dark:text-slate-300">Password<span className="text-xs text-red-500">*</span></label>
+                <label htmlFor="password" className="modal-label">Password<span className="text-xs text-red-500">*</span></label>
                 <button 
                   onClick={generatePassword}
-                  className="text-sm pr-2 text-sky-600 hover:underline hover:text-sky-400 cursor-pointer transition-all duration-300">
+                  className="modal-btn">
                   Generate</button>
               </div>
                 <PasswordInput
@@ -179,7 +189,7 @@ const AddAccount = ({type, isVisible, onClose, account}: {type: string, isVisibl
           {error && <p className="text-red-600 text-xs place-self-start mt-1">{error}</p>}
       <button type="submit" 
 
-        className="mt-8 mb-2 btn-primary w-full py-2">
+        className="mt-10 mb-2 btn-primary w-full py-2">
          {type === "add" ? "Add new account" : "Edit Account" }
         </button>
     </form>

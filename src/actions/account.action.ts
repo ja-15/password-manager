@@ -5,14 +5,14 @@ import { getDbUserId } from "./user.action";
 import { revalidatePath } from "next/cache";
 import { encryptPassword, decryptPassword } from "@/utils/cryptoUtils";
 
-type Account = {
+export type Account = {
+  id: string;
   websiteName: string;
   email: string;
   username?: string | null;
   password: string;
-  createdAt:  Date
+  createdAt:  Date;
 };
-type NewAccount = Omit<Account, 'createdAt'>;
 
 
 export async function addNewAccount(
@@ -20,9 +20,9 @@ export async function addNewAccount(
   email: string,
   username: string | null,
   password: string
-): Promise<{success: boolean; account?: NewAccount; error?: string} | undefined> {
+): Promise<{success: boolean; account?: Account; error?: string} | undefined> {
 
-  const hashedPassword = encryptPassword(password);
+  const hashedPassword = encryptPassword(password)
   try {
     const userId = await getDbUserId();
 
@@ -35,13 +35,13 @@ export async function addNewAccount(
         username,
         password: hashedPassword,
         userId: userId
-      }
-    })
-    
-    revalidatePath('/dashboard')
-    const {createdAt, ...accountWithoutCreatedAt} = account;
-    
-    return {success: true, account: accountWithoutCreatedAt}
+      },
+    });
+    const decryptedAccount = {...account,
+      password: decryptPassword(account.password)
+    }
+    revalidatePath('/dashboard');
+    return {success: true, account: decryptedAccount}
   } catch (error) { 
     console.error("Failed to add account", error);
     return {success:false, error: "Failed to add account"}
@@ -71,7 +71,7 @@ export async function getAccounts(): Promise<{ success: boolean; accounts?: Acco
         password: true,
         createdAt: true,
       }
-    })
+    });
 
 
     const decryptedAccounts = accounts.map(account => {
@@ -85,7 +85,7 @@ export async function getAccounts(): Promise<{ success: boolean; accounts?: Acco
     
     return {success: true, accounts: decryptedAccounts};
   } catch (error) {
-    console.log("Error in getAccounts", error);
+    console.log("Error in getAccounts", error || {});
     return { success: false, error: "Failed to get Accounts" }; // Return instead of throwing to prevent app crash
   };
 }
@@ -120,12 +120,17 @@ export async function editAccount(accountId: string, formData: FormData) {
         websiteName,
         email,
         username,
-        password: hashedPassword
+        password: hashedPassword,
+        
       },
     });
-    revalidatePath("/dashboard");
-    return {success: true, account};
-  
+    const decryptedAccount = {
+      ...account,
+      password: decryptPassword(account.password),
+    };
+
+    revalidatePath('/dashboard'); // Revalidate after editing the account
+    return { success: true, account: decryptedAccount };
   }catch (error) {
     console.error("Error updating account", error);
     return {success: false, error: "Failed to update account"}
@@ -149,7 +154,7 @@ export async function deleteAccount(accountId: string) {
       where: {id: accountId},
     });
 
-    revalidatePath("/dashboard")
+    revalidatePath('/dashboard');
     return {success: true}
 
   } catch (error) {

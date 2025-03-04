@@ -33,7 +33,7 @@ const NavbarClient = () => {
 
   return (
     <div className='dark:slate-950 pt-4'>
-    <nav className='md:max-container flex justify-between h-14 mt-4  items-center dark:bg-slate-800 dark:border-slate-700 bg-white drop-shadow-3xl rounded-xl px-2 border'>
+    <nav className='nav-div'>
     <Link href='/'>
     <div className='flex gap-1 align-middle text-black py-1 items-center'>
     <SiGoogletagmanager className='size-6 text-sky-600'/>
@@ -83,9 +83,9 @@ const NavbarClient = () => {
 
         {/* mobile nav */}
 
-    <div className={`${navOpen} text-white fixed inset-0 z-50 bg-black/70 w-full h-screen backdrop-blur-sm transform transition-all duration-500`}>
+    <div className={`${navOpen} mobile-nav-div`}>
 
-    <div className={`${navOpen}text-white px-6 bg-black fixed flex flex-col h-full transform transition-all duration-500 w-[80%]`} >
+    <div className={`${navOpen} mobile-nav-div-inner` } >
       
       <div className='md:hidden pt-4'>
           <SignedIn>

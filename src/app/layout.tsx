@@ -34,6 +34,7 @@ export default function RootLayout({
           <div className="gradient"></div>
           <main className='mx-4 '>
             <Navbar />
+           
             {children}
           </main>
           

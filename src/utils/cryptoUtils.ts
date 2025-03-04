@@ -1,15 +1,15 @@
 import crypto from 'crypto';
 
 const algorithm = 'aes-256-cbc';
-const secretKey = process.env.ENCRYPTION_KEY;
+const ENCRYPTION_KEY = process.env.ENCRYPTION_KEY;
 
-if (!secretKey) {
+if (!ENCRYPTION_KEY) {
   throw new Error('ENCRYPTION_KEY is not defined in the environment variables');
 }
 
 const iv = crypto.randomBytes(16);
 // Ensure the key is 32 bytes long
-const key = crypto.createHash('sha256').update(String(secretKey)).digest('base64').substr(0, 32);
+const key = crypto.createHash('sha256').update(String(ENCRYPTION_KEY)).digest('base64').substr(0, 32);
 
 
 //Encrypt

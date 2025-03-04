@@ -4,15 +4,20 @@ import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import dynamic from 'next/dynamic';
 import { IoIosCopy } from "react-icons/io";
+import { toast } from "sonner";
+import { FaCheck } from "react-icons/fa6";
 
 
 const PasswordToggle = ({password}: {password:string}) => {
   const [showPassword, setShowPassword] = useState(false);
+  const [isCopied, setIsCopied] = useState(false)
 
   const handleCopy = async() => {
     try {
       await navigator.clipboard.writeText(password);
-      console.log("Password copied to clipboard");
+      setIsCopied(true)
+      toast("Password copied to clipboard!");
+      setTimeout( () => setIsCopied(false), 2000)
     } catch (error) {
       console.error("Failed to copy password", error);
     }
@@ -25,9 +30,13 @@ const PasswordToggle = ({password}: {password:string}) => {
       onClick={() => setShowPassword(!showPassword)}>
         {showPassword ? <FaEyeSlash  /> : <FaEye />}
       </button>
+      {!isCopied ? 
       <IoIosCopy 
         onClick={handleCopy}
         className="hover:text-sky-600 transition-all duration-300 ease-in-out" />
+        : 
+        <FaCheck />
+      }
       </div>
     </td>
   )

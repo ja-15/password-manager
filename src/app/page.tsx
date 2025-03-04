@@ -10,7 +10,7 @@ export default async function Home() {
      <h1 className="head_text">Generate, store, and autofill complex <span className="hidden sm:inline"> <br /> </span>
      <span> passwords effortlessly.</span>
      </h1>
-     <p className="mt-6 text-[16px] md:text-lg text-slate-500 dark:text-slate-400 text-center font-medium">Stay Secure, Stay In Control Stop worrying about forgotten passwords or security breaches. 
+     <p className="page-p">Stay Secure, Stay In Control Stop worrying about forgotten passwords or security breaches. 
      <span className="hidden sm:inline"> <br /> </span>
       Start managing your credentials the smart way today!</p>
 

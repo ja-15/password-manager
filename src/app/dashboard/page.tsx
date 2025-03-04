@@ -19,7 +19,7 @@ const Dashboard = async() => {
   }
 
   return (
-    <DashboardClient accounts={accounts}  />
+    <DashboardClient accounts={accounts || []}  />
   )
 }
 
