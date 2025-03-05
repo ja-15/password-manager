@@ -5,7 +5,7 @@ const DeleteModal = ({onDelete, onClose, isDeleteModelVisible, accountId}: {onDe
 
   if (!isDeleteModelVisible) return null
   return (
-    <div className='fixed inset-0 bg-black/40 flex justify-center items-center backdrop-blur-xs '>
+    <div className='fixed inset-0 bg-black/40 flex justify-center items-center backdrop-blur-xs z-50'>
       <div className='delete-modal-div'>
       <FaCircleInfo className='dark:text-slate-300 text-slate-700 size-8 mb-4' />
       <p className='text-lg dark:text-slate-300 text-slate-950'>Are you sure you want to delete this account?</p>
