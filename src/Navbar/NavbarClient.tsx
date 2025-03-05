@@ -58,9 +58,8 @@ const NavbarClient = () => {
               <IoIosLogIn className='size-5' />
             </button>
           </SignInButton>
-            <SignUpButton mode='modal'>
+            <SignUpButton forceRedirectUrl='/dashboard' mode='modal'>
               <button className='btn-secondary max-lg:hidden flex gap-2 items-center'>
-              
                 Sign up
                 <FaUser className='size-4' />
               </button>
@@ -107,7 +106,7 @@ const NavbarClient = () => {
               <IoIosLogIn className='size-7' />
             </button>
           </SignInButton>
-            <SignUpButton mode='modal'>
+            <SignUpButton forceRedirectUrl='/dashboard' mode='modal'>
               <button className='btn-secondary w-fit mt-4 text-2xl font-semibold flex items-center gap-2'>
                 Sign up
                 <FaUser className='size-5' />
